@@ -8,6 +8,7 @@ public class QuizPlayer extends Thread {
     Socket socket;
     QuizGame game;
     String playerName;
+    int howManyQuestions = 4;
     PrintWriter output;
     BufferedReader input;
     public boolean cont = false;
@@ -39,7 +40,8 @@ public class QuizPlayer extends Thread {
         //temp
         int count = 0;
 
-        while (true) {
+        //while (true)
+        for (int i = 0; i < howManyQuestions; i++) {
             game.addAnswered(playerName, false);
             output.println(qdb.questionList.get(count).getQuestionText());
             try {
@@ -62,7 +64,7 @@ public class QuizPlayer extends Thread {
 
             cont = false;
 
-            if (playerAns.equalsIgnoreCase(qdb.questionList.get(0).getCorrectIndex())) {
+            if (playerAns.equalsIgnoreCase(qdb.questionList.get(count).getCorrectIndex())) {
                 game.addPoints(playerName);
                 output.println("player score ++");
             } else {
@@ -71,6 +73,10 @@ public class QuizPlayer extends Thread {
             count ++;
             if (count == 4) count = 0;
         }
+
+        //send game results
+        output.println(game.getPlayersScore());
+
     }
 
     public void sendToClient (String s) {

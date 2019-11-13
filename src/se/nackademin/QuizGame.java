@@ -10,14 +10,14 @@ public class QuizGame {
     boolean player2_answered = false;
 
 
-    public void addPoints (String playerName) {
+    public synchronized void addPoints (String playerName) {
         if (playerName.equalsIgnoreCase("Player1"))
             player1_score ++;
         if (playerName.equalsIgnoreCase("Player2"))
             player2_score ++;
     }
 
-    public void addAnswered (String playerName, boolean status) {
+    public synchronized void addAnswered (String playerName, boolean status) {
         if (playerName.equalsIgnoreCase("Player1"))
             player1_answered = status;
         if (playerName.equalsIgnoreCase("Player2"))
@@ -27,23 +27,23 @@ public class QuizGame {
         }
     }
 
-    public void setCont () {
+    public synchronized void setCont () {
         for(QuizPlayer p : players) {
             p.cont = true;
         }
     }
-    public boolean bothAnswered () {
+    public synchronized boolean bothAnswered () {
         if(player2_answered && player1_answered)
             return true;
         else
             return false;
     }
 
-    public String getPlayersScore () {
+    public synchronized String getPlayersScore () {
         return "p1: " + player1_score + " p2: " + player2_score;
     }
 
-    public void addPlayer (QuizPlayer qp) {
+    public synchronized void addPlayer (QuizPlayer qp) {
         players.add(qp);
     }
 }

@@ -11,7 +11,6 @@ public class QuizPlayer extends Thread {
     PrintWriter output;
     BufferedReader input;
     public boolean cont = false;
-    int playerScore = 0;
 
     public QuizPlayer (Socket clientSocket, QuizGame game, String playerName) {
         this.game = game;
@@ -31,11 +30,9 @@ public class QuizPlayer extends Thread {
     }
 
     public void run () {
-        // ------------
-        game.addPlayer(this);
-        //QuizGame.main();
 
-        // -------------
+        game.addPlayer(this);
+
         String playerAns = "";
         QuestionDB qdb = new QuestionDB();
 
@@ -44,7 +41,7 @@ public class QuizPlayer extends Thread {
 
         while (true) {
             game.addAnswered(playerName, false);
-            output.println(qdb.questionList.get(0).getQuestionText());
+            output.println(qdb.questionList.get(count).getQuestionText());
             try {
                 playerAns = input.readLine();
             } catch (IOException e) {
@@ -71,10 +68,9 @@ public class QuizPlayer extends Thread {
             } else {
                 output.println("wrong answer");
             }
-//            count ++;
-//            if (count == 4) break;
+            count ++;
+            if (count == 4) count = 0;
         }
-        //sendToClient(game.getPlayersScore());
     }
 
     public void sendToClient (String s) {

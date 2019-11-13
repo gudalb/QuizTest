@@ -1,22 +1,14 @@
 package se.nackademin;
 
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class QuizGame {
-    List<Socket> connectedClients = new ArrayList<>();
     static List<QuizPlayer> players = new ArrayList<>();
-    static QuestionDB qdb = new QuestionDB();
-    static int count = 0;
     static int player1_score = 0;
     static int player2_score = 0;
     boolean player1_answered = false;
     boolean player2_answered = false;
 
-    public static void main () {
-        count++;
-    }
 
     public void addPoints (String playerName) {
         if (playerName.equalsIgnoreCase("Player1"))
@@ -41,13 +33,10 @@ public class QuizGame {
         }
     }
     public boolean bothAnswered () {
-        if(player2_answered == true && player1_answered == true)
+        if(player2_answered && player1_answered)
             return true;
         else
             return false;
-    }
-    public void addClient (Socket socket) {
-        connectedClients.add(socket);
     }
 
     public String getPlayersScore () {

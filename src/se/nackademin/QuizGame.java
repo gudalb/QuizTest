@@ -8,6 +8,30 @@ public class QuizGame {
     static int player2_score = 0;
     boolean player1_answered = false;
     boolean player2_answered = false;
+    boolean someoneWaiting = false;
+
+    public synchronized void getThreadStates () {
+
+    }
+
+    public synchronized void setWaiting () throws InterruptedException {
+        this.someoneWaiting = true;
+        wait();
+    }
+
+    public synchronized void setNotWaiting () {
+        this.someoneWaiting = false;
+    }
+
+    public synchronized void notifyAll_ () {
+        notifyAll();
+    }
+    public synchronized boolean isSomeoneWaiting () {
+        if (someoneWaiting) {
+            return true;
+        } else
+            return false;
+    }
 
 
     public synchronized void addPoints (String playerName) {

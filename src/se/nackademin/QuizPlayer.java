@@ -8,10 +8,12 @@ public class QuizPlayer extends Thread {
     Socket socket;
     QuizGame game;
     String playerName;
+    QuizPlayer opponentQP;
     int howManyQuestions = 4;
     PrintWriter output;
     BufferedReader input;
     public boolean cont = false;
+    Thread opponentThread;
 
     public QuizPlayer (Socket clientSocket, QuizGame game, String playerName) {
         this.game = game;
@@ -23,14 +25,14 @@ public class QuizPlayer extends Thread {
             output = new PrintWriter(socket.getOutputStream(), true);
 
             output.println("Hello " + playerName);
-            output.println("Waiting for Players...");
+            output.println("Waiting for Players...\n");
         }
         catch (IOException e) {
             System.out.println("IO ERROR");
         }
     }
 
-    public void run () {
+    public synchronized void run () {
 
         game.addPlayer(this);
 
@@ -49,18 +51,32 @@ public class QuizPlayer extends Thread {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             game.addAnswered(playerName, true);
 
-            while (!cont) {
-                // behövde sleep här annars går inte båda klienter vidare
+            if (!game.isSomeoneWaiting()) {
                 try {
-                    Thread.sleep(1000);
+                    game.setWaiting();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                output.println("waiting for other client");
             }
+            else
+                game.notifyAll_();
+
+            game.setNotWaiting();
+
+
+
+//            while (!cont) {
+//                // behövde sleep här annars går inte båda klienter vidare
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                output.println("waiting for other client");
+//            }
 
             cont = false;
 
@@ -77,8 +93,23 @@ public class QuizPlayer extends Thread {
         //send game results
         output.println(game.getPlayersScore());
 
+        System.out.println("Exiting");
+
     }
 
+    public void addOpponentQP (QuizPlayer qp) {
+        this.opponentQP = qp;
+    }
+
+    public synchronized boolean stateWaiting () {
+        if (getState() == State.WAITING)
+            return true;
+        else
+            return false;
+    }
+    public void addOpponentThread (Thread t){
+        this.opponentThread = t;
+    }
     public void sendToClient (String s) {
         output.println(s);
     }

@@ -25,7 +25,8 @@ public class QuizPlayer extends Thread {
             output = new PrintWriter(socket.getOutputStream(), true);
 
             output.println("Hello " + playerName);
-            output.println("Waiting for Players...\n");
+            if (playerName.equals("Player1"))
+                output.println("Waiting for Players...\n");
         }
         catch (IOException e) {
             System.out.println("IO ERROR");

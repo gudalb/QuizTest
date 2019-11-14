@@ -10,9 +10,6 @@ public class QuizGame {
     boolean player2_answered = false;
     boolean someoneWaiting = false;
 
-    public synchronized void getThreadStates () {
-
-    }
 
     public synchronized void setWaiting () throws InterruptedException {
         this.someoneWaiting = true;

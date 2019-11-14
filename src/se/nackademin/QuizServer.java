@@ -27,10 +27,6 @@ public class QuizServer {
             p2.start();
 
 
-//            player_1.start();
-//            player_2.start();
-
-
 
         } catch (IOException e) {
             e.printStackTrace();

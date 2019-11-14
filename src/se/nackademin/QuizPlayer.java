@@ -39,13 +39,10 @@ public class QuizPlayer extends Thread {
         String playerAns = "";
         QuestionDB qdb = new QuestionDB();
 
-        //temp
-        int count = 0;
 
-        //while (true)
         for (int i = 0; i < howManyQuestions; i++) {
             game.addAnswered(playerName, false);
-            output.println(qdb.questionList.get(count).getQuestionText());
+            output.println(qdb.questionList.get(i).getQuestionText());
             try {
                 playerAns = input.readLine();
             } catch (IOException e) {
@@ -67,33 +64,18 @@ public class QuizPlayer extends Thread {
             game.setNotWaiting();
 
 
-
-//            while (!cont) {
-//                // behövde sleep här annars går inte båda klienter vidare
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                output.println("waiting for other client");
-//            }
-
-            cont = false;
-
-            if (playerAns.equalsIgnoreCase(qdb.questionList.get(count).getCorrectIndex())) {
+            if (playerAns.equalsIgnoreCase(qdb.questionList.get(i).getCorrectIndex())) {
                 game.addPoints(playerName);
                 output.println("player score ++");
             } else {
                 output.println("wrong answer");
             }
-            count ++;
-            if (count == 4) count = 0;
+
         }
 
         //send game results
         output.println(game.getPlayersScore());
 
-        System.out.println("Exiting");
 
     }
 
